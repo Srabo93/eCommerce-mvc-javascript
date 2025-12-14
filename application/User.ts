@@ -1,4 +1,10 @@
 export type UserRole = "user" | "admin";
+export interface UserDTO {
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: UserRole;
+}
 
 export class User {
   private constructor(
@@ -76,7 +82,7 @@ export class User {
     return this._role;
   }
 
-  get properties() {
+  get properties(): UserDTO {
     return {
       email: this._email,
       firstName: this._firstName,
