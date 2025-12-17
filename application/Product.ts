@@ -1,10 +1,3 @@
-export interface ProductDTO {
-  title: string;
-  description: string;
-  price: number;
-  image: string;
-  rating: number;
-}
 export class Product {
   private constructor(
     private _title: string,
@@ -102,15 +95,5 @@ export class Product {
   }
   get rating(): number {
     return this._rating;
-  }
-
-  get properties(): ProductDTO {
-    return {
-      title: this._title,
-      description: this._description,
-      price: this._price,
-      image: this._image,
-      rating: this._rating,
-    };
   }
 }

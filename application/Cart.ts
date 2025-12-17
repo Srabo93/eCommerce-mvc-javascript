@@ -57,12 +57,4 @@ export class Cart {
       0,
     );
   }
-
-  get properties() {
-    return this._cartItems.map((item) => ({
-      product: item.product.properties,
-      quantity: item.quantity,
-      totalPrice: item.product.price * item.quantity,
-    }));
-  }
 }

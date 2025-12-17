@@ -1,6 +1,7 @@
 import { ForPersistingProducts } from "@application/outbound/ForPersistingProducts.ts";
 import { InMemoryProductDB } from "./test/interactor/InMemoryProductDB.ts";
 import { load } from "jsr:@std/dotenv";
+import { PostgreSQLRepository } from "@adapters/outbound/PostgreSQLRepository.ts";
 
 export interface AppContext {
   productRepo: ForPersistingProducts;
@@ -17,11 +18,12 @@ export function createContext(): AppContext {
       const productRepo = new InMemoryProductDB();
       return { productRepo };
     }
-    //
-    // case "integration": {
-    //
-    // }
-    //
+
+    case "integration": {
+      const productRepo = new PostgreSQLRepository();
+      return { productRepo };
+    }
+
     // case "prod": {
     //   const database = getDatabase("prod");
     //   migrate(database);

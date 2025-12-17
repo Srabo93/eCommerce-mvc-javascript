@@ -136,21 +136,3 @@ Deno.test("updateTotalRating throws if newRating <= 0", () => {
     "New product rating cant be smaller or equal 0",
   );
 });
-
-Deno.test("properties getter returns all fields", () => {
-  const product = Product.create({
-    title: "Laptop",
-    description: "High-end laptop",
-    price: 1200,
-    image: "laptop.png",
-    rating: 5,
-  });
-
-  assertEquals(product.properties, {
-    title: "Laptop",
-    description: "High-end laptop",
-    price: 1200,
-    image: "laptop.png",
-    rating: 5,
-  });
-});

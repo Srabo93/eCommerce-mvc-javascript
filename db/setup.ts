@@ -55,30 +55,6 @@ async function main() {
   );
 `);
     console.log("Users table created/verified successfully.");
-
-    // const insertQuery = `
-    //   INSERT INTO products (title, description, price, image, rating)
-    //   VALUES ($1, $2, $3, $4, $5)
-    //   RETURNING *;
-    // `;
-    //
-    // const product = {
-    //   title: "Example Product",
-    //   description: "A product created via Deno",
-    //   price: 42,
-    //   image: "https://example.com/image.png",
-    //   rating: 5,
-    // };
-    //
-    // const result = await client.query(insertQuery, [
-    //   product.title,
-    //   product.description,
-    //   product.price,
-    //   product.image,
-    //   product.rating,
-    // ]);
-    //
-    // console.log("Inserted product:", result.rows[0]);
   } catch (err) {
     console.error("Error:", err);
   } finally {

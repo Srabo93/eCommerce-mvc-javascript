@@ -88,12 +88,4 @@ export class ProductCategory {
   get products(): Product[] {
     return this._products;
   }
-
-  get properties() {
-    return {
-      title: this._title,
-      description: this._description,
-      products: this._products.map((p) => p.properties),
-    };
-  }
 }
