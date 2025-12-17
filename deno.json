@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "hono": "deno run --watch --allow-net --allow-read --allow-env ./hono/main.ts",
+    "hono": "deno run --watch --allow-net --allow-read --allow-env ./hono/index.ts",
     "db:setup": "deno run --allow-env --allow-net ./db/setup.ts",
     "db:seed": "deno run -A ./db/seed.ts",
     "dev": "deno run --watch --allow-env --allow-read --allow-net main.ts",

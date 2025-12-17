@@ -8,7 +8,7 @@ Deno.test(
     const inMemoryDB = new InMemoryProductDB();
     const controller = new ProductsHttpController(inMemoryDB);
 
-    const result = await controller.topProducts();
+    const result = await controller.top();
     assert(Array.isArray(result));
 
     for (const product of result) {
@@ -31,7 +31,7 @@ Deno.test("ProductsHttpController.topProducts respects limit", async () => {
   const inMemoryDB = new InMemoryProductDB();
   const controller = new ProductsHttpController(inMemoryDB);
 
-  const result = await controller.topProducts(1);
+  const result = await controller.top(1);
 
   assertEquals(result.length, 1);
 });
@@ -42,7 +42,7 @@ Deno.test(
     const inMemoryDB = new InMemoryProductDB();
     const controller = new ProductsHttpController(inMemoryDB);
 
-    const result = await controller.allProducts();
+    const result = await controller.all();
     assert(Array.isArray(result));
 
     for (const product of result) {

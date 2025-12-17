@@ -70,6 +70,68 @@ export class PostgreSQLRepository implements ForPersistingProducts {
     }
   }
 
-  findTopProducts(limit?: number): Promise<ProductDTO[]> {}
-  findAllProducts(): Promise<ProductDTO[]> {}
+  async findTopProducts(limit?: number): Promise<ProductRecord[]> {
+    const client = new Client({
+      hostname: "localhost",
+      port: 5432,
+      user: "myuser",
+      password: "mypassword",
+      database: "honodb",
+    });
+
+    const query = `
+    SELECT
+      id,
+      title,
+      description,
+      price,
+      image,
+      rating,
+      category_id
+    FROM products
+    ORDER BY rating DESC
+    LIMIT $1;
+  `;
+
+    let topProducts: ProductRecord[] = [];
+
+    try {
+      await client.connect();
+      const records = await client.query(query, [limit]);
+      topProducts = records.rows;
+    } catch (error) {
+      console.log(error);
+    } finally {
+      await client.end();
+    }
+
+    return topProducts;
+  }
+
+  async findAllProducts(): Promise<ProductRecord[]> {
+    const client = new Client({
+      hostname: "localhost",
+      port: 5432,
+      user: "myuser",
+      password: "mypassword",
+      database: "honodb",
+    });
+
+    const query = `
+    SELECT * FROM products;
+    `;
+    let allRecords: ProductRecord[] = [];
+
+    try {
+      await client.connect();
+      const records = await client.query(query);
+      allRecords = records.rows;
+    } catch (error) {
+      console.log(error);
+    } finally {
+      await client.end();
+    }
+
+    return allRecords;
+  }
 }

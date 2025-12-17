@@ -12,7 +12,7 @@ export class ProductsHttpController implements ForHandlingProducts {
     throw new Error("Method not implemented.");
   }
 
-  async allProducts(): Promise<ProductDTO[]> {
+  async all(): Promise<ProductDTO[]> {
     const allProducts = await this.db.findAllProducts();
 
     return allProducts.map((productRecord) => {
@@ -20,7 +20,7 @@ export class ProductsHttpController implements ForHandlingProducts {
     });
   }
 
-  async topProducts(limit?: number): Promise<ProductDTO[]> {
+  async top(limit?: number): Promise<ProductDTO[]> {
     const topProductsRecord = await this.db.findTopProducts(limit);
 
     return topProductsRecord.map((topProduct) => {
