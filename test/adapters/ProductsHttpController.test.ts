@@ -1,11 +1,11 @@
 import { assert, assertEquals } from "@std/assert";
 import { ProductsHttpController } from "@adapters/inbound/ProductsHttpController.ts";
-import { InMemoryProductDB } from "../interactor/InMemoryProductDB.ts";
+import { InMemoryDB } from "../interactor/InMemoryDB.ts";
 
 Deno.test(
   "ProductsHttpController.topProducts returns products from repository",
   async () => {
-    const inMemoryDB = new InMemoryProductDB();
+    const inMemoryDB = new InMemoryDB();
     const controller = new ProductsHttpController(inMemoryDB);
 
     const result = await controller.top();
@@ -28,7 +28,7 @@ Deno.test(
 );
 
 Deno.test("ProductsHttpController.topProducts respects limit", async () => {
-  const inMemoryDB = new InMemoryProductDB();
+  const inMemoryDB = new InMemoryDB();
   const controller = new ProductsHttpController(inMemoryDB);
 
   const result = await controller.top(1);
@@ -39,7 +39,7 @@ Deno.test("ProductsHttpController.topProducts respects limit", async () => {
 Deno.test(
   "ProductsHttpController.allProducts returns products from repository",
   async () => {
-    const inMemoryDB = new InMemoryProductDB();
+    const inMemoryDB = new InMemoryDB();
     const controller = new ProductsHttpController(inMemoryDB);
 
     const result = await controller.all();

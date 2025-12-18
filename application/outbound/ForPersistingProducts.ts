@@ -4,8 +4,8 @@ import {
 } from "@adapters/anti-corruption-layer/ProductsMapper.ts";
 
 export interface ForPersistingProducts {
-  create(product: Omit<ProductDTO, "id">): Promise<void>;
-  save(product: ProductRecord): Promise<void>;
-  findTopProducts(limit?: number): Promise<ProductRecord[]>;
-  findAllProducts(): Promise<ProductRecord[]>;
+  createProduct(product: Omit<ProductDTO, "id">): Promise<void>;
+  saveProduct(product: ProductRecord): Promise<void>;
+  topProducts(limit?: number): Promise<ProductRecord[]>;
+  allProducts(): Promise<ProductRecord[]>;
 }

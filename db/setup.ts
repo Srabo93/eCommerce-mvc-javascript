@@ -49,6 +49,7 @@ async function main() {
   CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) NOT NULL CHECK (char_length(email) >= 2),
+    password VARCHAR(255) NOT NULL,
     first_name VARCHAR(255) NOT NULL CHECK (char_length(first_name) >= 2),
     last_name VARCHAR(255) NOT NULL CHECK (char_length(last_name) >= 2),
     role VARCHAR(255) NOT NULL CHECK (char_length(role) >= 2)

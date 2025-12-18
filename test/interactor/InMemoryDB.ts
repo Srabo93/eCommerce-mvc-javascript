@@ -4,9 +4,18 @@ import {
   ProductRecord,
   ProductsMapper,
 } from "@adapters/anti-corruption-layer/ProductsMapper.ts";
+import { ForPersistingUsers } from "@application/outbound/ForPersistingUser.ts";
+import {
+  UserDTO,
+  UserRecord,
+  UsersMapper,
+} from "@adapters/anti-corruption-layer/UsersMapper.ts";
 
-export class InMemoryProductDB implements ForPersistingProducts {
-  constructor(private _products: ProductRecord[] = []) {
+export class InMemoryDB implements ForPersistingProducts, ForPersistingUsers {
+  constructor(
+    private _products: ProductRecord[] = [],
+    private _users: UserRecord[] = [],
+  ) {
     for (let i = 0; i <= 10; i++) {
       const product = ProductsMapper.toPersistence({
         id: i,
@@ -21,7 +30,19 @@ export class InMemoryProductDB implements ForPersistingProducts {
       this._products.push(product);
     }
   }
-  create(product: Omit<ProductDTO, "id">): Promise<void> {
+  findUserByEmail(email: string): Promise<UserRecord | undefined> {
+    const userFound = this._users.find(
+      (userRecord) => userRecord.email === email,
+    );
+    return new Promise((resolve, _reject) => {
+      resolve(userFound);
+    });
+  }
+
+  registerUser(newUser: Omit<UserDTO, "id">): void {
+    this._users.push(UsersMapper.toPersistence({ id: 303, ...newUser }));
+  }
+  createProduct(product: Omit<ProductDTO, "id">): Promise<void> {
     return new Promise((resolve, _reject) => {
       const newRecord = {
         id: 55,
@@ -36,13 +57,13 @@ export class InMemoryProductDB implements ForPersistingProducts {
       resolve();
     });
   }
-  save(product: ProductRecord): Promise<void> {
+  saveProduct(product: ProductRecord): Promise<void> {
     return new Promise((resolve, _reject) => {
       this._products.push(product);
       resolve();
     });
   }
-  findTopProducts(limit?: number): Promise<ProductRecord[]> {
+  topProducts(limit?: number): Promise<ProductRecord[]> {
     return new Promise((resolve, _reject) => {
       const result = this._products
         .filter((product) => product.price > 5)
@@ -51,7 +72,7 @@ export class InMemoryProductDB implements ForPersistingProducts {
       resolve(result);
     });
   }
-  findAllProducts(): Promise<ProductRecord[]> {
+  allProducts(): Promise<ProductRecord[]> {
     return new Promise((resolve, _reject) => {
       const result = this._products.map((product) => product);
       resolve(result);

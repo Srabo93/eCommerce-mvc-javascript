@@ -3,7 +3,7 @@ import { ProductsHttpController } from "@adapters/inbound/ProductsHttpController
 import { createContext } from "../configurator.ts";
 
 const app = new Hono();
-const { productRepo } = createContext();
+const { database: postgreSQLRepository } = createContext();
 
 app.post("/", (c) => {
   const newProduct = {
@@ -15,7 +15,7 @@ app.post("/", (c) => {
     categoryId: 4,
   };
 
-  const productController = new ProductsHttpController(productRepo);
+  const productController = new ProductsHttpController(postgreSQLRepository);
   productController.create(newProduct);
 
   return c.json({
@@ -24,7 +24,7 @@ app.post("/", (c) => {
 });
 
 app.get("/", async (c) => {
-  const productController = new ProductsHttpController(productRepo);
+  const productController = new ProductsHttpController(postgreSQLRepository);
   const products = await productController.all();
   return c.json(products);
 });
@@ -37,7 +37,7 @@ app.get("/top", async (c) => {
   if (limit !== undefined && (!Number.isInteger(limit) || limit <= 0)) {
     return c.json({ error: "limit must be a positive integer" }, 400);
   }
-  const productController = new ProductsHttpController(productRepo);
+  const productController = new ProductsHttpController(postgreSQLRepository);
   const topProducts = await productController.top(limit);
   return c.json(topProducts);
 });

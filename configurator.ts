@@ -1,10 +1,11 @@
 import { ForPersistingProducts } from "@application/outbound/ForPersistingProducts.ts";
-import { InMemoryProductDB } from "./test/interactor/InMemoryProductDB.ts";
+import { InMemoryDB } from "./test/interactor/InMemoryDB.ts";
 import { load } from "jsr:@std/dotenv";
 import { PostgreSQLRepository } from "@adapters/outbound/PostgreSQLRepository.ts";
+import { ForPersistingUsers } from "@application/outbound/ForPersistingUser.ts";
 
 export interface AppContext {
-  productRepo: ForPersistingProducts;
+  database: ForPersistingProducts & ForPersistingUsers;
 }
 
 const env = await load({
@@ -15,13 +16,13 @@ const env = await load({
 export function createContext(): AppContext {
   switch (env.APP_ENV) {
     case "development": {
-      const productRepo = new InMemoryProductDB();
-      return { productRepo };
+      const database = new InMemoryDB();
+      return { database };
     }
 
     case "integration": {
-      const productRepo = new PostgreSQLRepository();
-      return { productRepo };
+      const database = new PostgreSQLRepository();
+      return { database };
     }
 
     // case "prod": {

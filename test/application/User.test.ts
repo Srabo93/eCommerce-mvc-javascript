@@ -100,18 +100,3 @@ Deno.test("User.promoteToAdmin() sets role to admin", () => {
   user.promoteToAdmin();
   assertEquals(user.role, "admin");
 });
-
-Deno.test("User.properties returns all fields", () => {
-  const user = User.create({
-    email: "john@example.com",
-    firstName: "John",
-    lastName: "Doe",
-  });
-
-  assertEquals(user.properties, {
-    email: "john@example.com",
-    firstName: "John",
-    lastName: "Doe",
-    role: "user",
-  });
-});

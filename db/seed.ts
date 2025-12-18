@@ -15,46 +15,6 @@ async function main() {
 
     await client.query("BEGIN");
 
-    /* -------------------- DROP TABLES -------------------- */
-
-    await client.query(`
-      DROP TABLE IF EXISTS products;
-      DROP TABLE IF EXISTS products_category;
-      DROP TABLE IF EXISTS users;
-    `);
-
-    /* -------------------- CREATE TABLES -------------------- */
-
-    await client.query(`
-      CREATE TABLE products_category (
-        id SERIAL PRIMARY KEY,
-        title VARCHAR(255) NOT NULL CHECK (char_length(title) >= 2),
-        description VARCHAR(255) NOT NULL CHECK (char_length(description) >= 2)
-      );
-    `);
-
-    await client.query(`
-      CREATE TABLE products (
-        id SERIAL PRIMARY KEY,
-        title VARCHAR(255) NOT NULL CHECK (char_length(title) >= 2),
-        description VARCHAR(255) NOT NULL CHECK (char_length(description) >= 2),
-        price INT NOT NULL CHECK (price > 0),
-        image VARCHAR(255) NOT NULL CHECK (char_length(image) >= 2),
-        rating INT NOT NULL CHECK (rating >= 0),
-        category_id INT NOT NULL REFERENCES products_category(id)
-      );
-    `);
-
-    await client.query(`
-      CREATE TABLE users (
-        id SERIAL PRIMARY KEY,
-        email VARCHAR(255) NOT NULL CHECK (char_length(email) >= 2),
-        first_name VARCHAR(255) NOT NULL CHECK (char_length(first_name) >= 2),
-        last_name VARCHAR(255) NOT NULL CHECK (char_length(last_name) >= 2),
-        role VARCHAR(255) NOT NULL CHECK (char_length(role) >= 2)
-      );
-    `);
-
     /* -------------------- SEED CATEGORIES -------------------- */
 
     const categories = [
@@ -148,18 +108,21 @@ async function main() {
     const users = [
       {
         email: "admin@example.com",
+        password: "123456",
         firstName: "Admin",
         lastName: "User",
         role: "admin",
       },
       {
         email: "user1@example.com",
+        password: "123456",
         firstName: "John",
         lastName: "Doe",
         role: "user",
       },
       {
         email: "user2@example.com",
+        password: "123456",
         firstName: "Jane",
         lastName: "Smith",
         role: "user",
@@ -169,10 +132,10 @@ async function main() {
     for (const user of users) {
       await client.query(
         `
-        INSERT INTO users (email, first_name, last_name, role)
-        VALUES ($1, $2, $3, $4);
+        INSERT INTO users (email, password, first_name, last_name, role)
+        VALUES ($1, $2, $3, $4, $5);
         `,
-        [user.email, user.firstName, user.lastName, user.role],
+        [user.email, user.password, user.firstName, user.lastName, user.role],
       );
     }
 

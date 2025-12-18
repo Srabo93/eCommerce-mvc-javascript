@@ -13,7 +13,7 @@ export class ProductsHttpController implements ForHandlingProducts {
   }
 
   async all(): Promise<ProductDTO[]> {
-    const allProducts = await this.db.findAllProducts();
+    const allProducts = await this.db.allProducts();
 
     return allProducts.map((productRecord) => {
       return ProductsMapper.toDTO(productRecord);
@@ -21,7 +21,7 @@ export class ProductsHttpController implements ForHandlingProducts {
   }
 
   async top(limit?: number): Promise<ProductDTO[]> {
-    const topProductsRecord = await this.db.findTopProducts(limit);
+    const topProductsRecord = await this.db.topProducts(limit);
 
     return topProductsRecord.map((topProduct) => {
       return ProductsMapper.toDTO(topProduct);
@@ -29,6 +29,6 @@ export class ProductsHttpController implements ForHandlingProducts {
   }
 
   create(product: Omit<ProductDTO, "id">): void {
-    this.db.create(product);
+    this.db.createProduct(product);
   }
 }
