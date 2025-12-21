@@ -1,62 +1,62 @@
-import { User, UserRole } from "@application/User.ts";
+import * as z from "zod";
+import { User } from "../User.ts";
 
-export type UserDTO = {
-  id: number;
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  role: UserRole;
-};
+export const CreateUserSchema = z.object({
+  email: z.email(),
+  firstName: z.string().min(2),
+  lastName: z.string().min(2),
+  role: z.enum(["user", "admin"]),
+});
 
-export type UserRecord = {
-  id: number;
-  email: string;
-  password: string;
-  first_name: string;
-  last_name: string;
-  role: UserRole;
-};
+export type CreateUserDTO = z.infer<typeof CreateUserSchema>;
+
+export const UserRecordSchema = z.object({
+  id: z.number().int().positive(),
+  email: z.email(),
+  firstName: z.string().min(2),
+  lastName: z.string().min(2),
+  role: z.enum(["user", "admin"]),
+});
+
+export type UserRecord = z.infer<typeof UserRecordSchema>;
+
+export const PublicUserDTOSchema = z.object({
+  id: z.number().int().positive(),
+  email: z.email(),
+  firstName: z.string().min(2),
+  lastName: z.string().min(2),
+  role: z.enum(["user", "admin"]),
+});
+
+export type PublicUserDTO = z.infer<typeof PublicUserDTOSchema>;
 
 export class UsersMapper {
-  static toDomain(record: UserRecord): User {
+  static toEntity(record: UserRecord): User {
     return User.create({
       email: record.email,
-      firstName: record.first_name,
-      lastName: record.last_name,
+      firstName: record.firstName,
+      lastName: record.lastName,
       role: record.role,
     });
   }
 
-  static toPersistence(dto: UserDTO): UserRecord {
-    return {
-      id: dto.id,
-      password: dto.password,
-      email: dto.email,
-      first_name: dto.firstName,
-      last_name: dto.lastName,
-      role: dto.role,
-    };
-  }
-
-  static toDTO(record: UserRecord): UserDTO {
-    return {
-      id: record.id,
-      password: record.password,
-      email: record.email,
-      firstName: record.first_name,
-      lastName: record.last_name,
-      role: record.role,
-    };
-  }
-
-  static toPublicDTO(user: UserRecord): Omit<UserDTO, "password"> {
+  static toRecord(user: PublicUserDTO): UserRecord {
     return {
       id: user.id,
       email: user.email,
-      firstName: user.first_name,
-      lastName: user.last_name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       role: user.role,
+    };
+  }
+
+  static toPublicDTO(record: UserRecord): PublicUserDTO {
+    return {
+      id: record.id,
+      email: record.email,
+      firstName: record.firstName,
+      lastName: record.lastName,
+      role: record.role,
     };
   }
 }

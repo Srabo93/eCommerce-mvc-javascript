@@ -1,11 +1,10 @@
-import { ForHandlingProducts } from "@application/inbound/product/ForHandlingProducts.ts";
 import { ProductService } from "@application/service/product.ts";
 import {
   CreateProductDTO,
   PublicProductDTO,
 } from "@application/anti-corruption-layer/ProductsMapper.ts";
 
-export class ProductsHttpController implements ForHandlingProducts {
+export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   async create(dto: CreateProductDTO): Promise<void> {

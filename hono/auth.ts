@@ -2,11 +2,11 @@ import { Hono } from "hono";
 import * as z from "zod";
 import { createContext } from "../configurator.ts";
 import { hash, verify } from "@felix/bcrypt";
-import { UsersHttpController } from "@adapters/inbound/UsersHttpController.ts";
+import { UsersHttpController } from "@adapters/inbound/UserController.ts";
 import { UsersMapper } from "@adapters/anti-corruption-layer/UsersMapper.ts";
 
 const app = new Hono();
-const { database } = createContext();
+const { usersController } = createContext();
 const token = "read+write";
 
 const registerSchema = z.object({

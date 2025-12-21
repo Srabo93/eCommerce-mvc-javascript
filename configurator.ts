@@ -2,7 +2,9 @@ import { InMemoryDB } from "./test/interactor/InMemoryDB.ts";
 import { load } from "jsr:@std/dotenv";
 import { PostgreSQLRepository } from "@adapters/outbound/PostgreSQLRepository.ts";
 import { ProductService } from "@application/service/product.ts";
-import { ProductsHttpController } from "@adapters/inbound/ProductsHttpController.ts";
+import { ProductsHttpController } from "@adapters/inbound/ProductController.ts";
+import { UsersHttpController } from "@adapters/inbound/UserController.ts";
+import { UserService } from "@application/service/user.ts";
 
 const env = await load({
   envPath: ".env",
@@ -14,6 +16,8 @@ export function createContext() {
     case "development": {
       const database = new InMemoryDB();
       const productService = new ProductService(database);
+      const userService = new UserService(database);
+      const usersController = new UsersHttpController(userService);
       const productController = new ProductsHttpController(productService);
       return { productController };
     }
