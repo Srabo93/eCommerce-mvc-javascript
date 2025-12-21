@@ -1,11 +1,8 @@
-import { ForPersistingProducts } from "@application/outbound/ForPersistingProducts.ts";
 import { Client } from "pg";
-import {
-  ProductDTO,
-  ProductRecord,
-} from "../anti-corruption-layer/ProductsMapper.ts";
-import { ForPersistingUsers } from "@application/outbound/ForPersistingUser.ts";
-import { UserDTO, UserRecord } from "../anti-corruption-layer/UsersMapper.ts";
+import { ProductRecord } from "@application/anti-corruption-layer/ProductsMapper.ts";
+import { UserRecord } from "@application/anti-corruption-layer/UsersMapper.ts";
+import { ForPersistingUsers } from "@application/driven_ports/for_persisting_users/ForPersistingUser.ts";
+import { ForPersistingProducts } from "@application/driven_ports/for_persisting_products/ForPersistingProducts.ts";
 
 export class PostgreSQLRepository
   implements ForPersistingProducts, ForPersistingUsers

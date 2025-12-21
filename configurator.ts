@@ -1,10 +1,10 @@
-import { InMemoryDB } from "./test/interactor/InMemoryDB.ts";
 import { load } from "jsr:@std/dotenv";
-import { PostgreSQLRepository } from "@adapters/outbound/PostgreSQLRepository.ts";
-import { ProductService } from "@application/service/product.ts";
-import { ProductsHttpController } from "@adapters/inbound/ProductController.ts";
-import { UsersHttpController } from "@adapters/inbound/UserController.ts";
-import { UserService } from "@application/service/user.ts";
+import { ProductService } from "@application/service/ProductService.ts";
+import { PostgreSQLRepository } from "./driven_adapters/postgresqlRepository/PostgreSQLRepository.ts";
+import { InMemoryDB } from "./test/interactor/InMemoryDB.ts";
+import { ProductHttpAdapter } from "./driving_adapters/rest/ProductHttpAdapter.ts";
+import { UserService } from "@application/service/UserService.ts";
+import { UserHttpAdapter } from "./driving_adapters/rest/UserHttpAdapter.ts";
 
 const env = await load({
   envPath: ".env",
@@ -17,15 +17,15 @@ export function createContext() {
       const database = new InMemoryDB();
       const productService = new ProductService(database);
       const userService = new UserService(database);
-      const usersController = new UsersHttpController(userService);
-      const productController = new ProductsHttpController(productService);
+      const usersController = new UserHttpAdapter(userService);
+      const productController = new ProductHttpAdapter(productService);
       return { productController };
     }
 
     case "integration": {
       const database = new PostgreSQLRepository();
       const productService = new ProductService(database);
-      const productController = new ProductsHttpController(productService);
+      const productController = new ProductHttpAdapter(productService);
       return { productController };
     }
 

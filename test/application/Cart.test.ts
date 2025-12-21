@@ -9,7 +9,7 @@ Deno.test("Cart creation with empty items", () => {
   assertEquals(cart.totalPrice, 0);
 });
 
-Deno.test("Add product to cart", () => {
+Deno.test("Add for_handling_products to cart", () => {
   const cart = Cart.create({});
   const product = Product.create({
     categoryId: 2,
@@ -27,7 +27,7 @@ Deno.test("Add product to cart", () => {
   assert(cart.hasProduct("Laptop"));
 });
 
-Deno.test("Add same product increments quantity", () => {
+Deno.test("Add same for_handling_products increments quantity", () => {
   const cart = Cart.create({});
   const product = Product.create({
     categoryId: 2,
@@ -46,7 +46,7 @@ Deno.test("Add same product increments quantity", () => {
   assertEquals(cart.totalPrice, 4000);
 });
 
-Deno.test("Remove product partially and fully", () => {
+Deno.test("Remove for_handling_products partially and fully", () => {
   const cart = Cart.create({});
   const product = Product.create({
     categoryId: 2,
@@ -71,7 +71,7 @@ Deno.test("Remove product partially and fully", () => {
   assertEquals(cart.totalPrice, 0);
 });
 
-Deno.test("Remove non-existing product does nothing", () => {
+Deno.test("Remove non-existing for_handling_products does nothing", () => {
   const cart = Cart.create({});
   const product = Product.create({
     categoryId: 2,

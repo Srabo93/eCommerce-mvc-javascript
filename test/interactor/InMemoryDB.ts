@@ -1,12 +1,11 @@
-import { ForPersistingProducts } from "@application/outbound/ForPersistingProducts.ts";
-import { ForPersistingUsers } from "@application/outbound/ForPersistingUser.ts";
-import { Product } from "@application/Product.ts";
 import { ProductRecord } from "@application/anti-corruption-layer/ProductsMapper.ts";
 import {
   UserRecord,
-  UserDTO,
   UsersMapper,
 } from "@application/anti-corruption-layer/UsersMapper.ts";
+import { ForPersistingProducts } from "@application/driven_ports/for_persisting_products/ForPersistingProducts.ts";
+import { ForPersistingUsers } from "@application/driven_ports/for_persisting_users/ForPersistingUser.ts";
+import { Product } from "@application/Product.ts";
 
 export class InMemoryDB implements ForPersistingProducts, ForPersistingUsers {
   constructor(
@@ -15,13 +14,13 @@ export class InMemoryDB implements ForPersistingProducts, ForPersistingUsers {
   ) {
     for (let i = 0; i <= 10; i++) {
       const product = {
-        productId: i,
+        productId: i + 12,
         title: `Product ${i}`,
         description: `Description ${i}`,
         price: 20 + i,
         image: `randomimageurl${1}`,
         rating: i,
-        categoryId: i,
+        categoryId: i + 45,
       } satisfies ProductRecord;
 
       this._products.push(product);

@@ -1,6 +1,5 @@
 import { Hono } from "hono";
 import { createContext } from "../configurator.ts";
-import { CreateProductSchema } from "@adapters/anti-corruption-layer/ProductsMapper.ts";
 import { ZodError } from "zod";
 
 const app = new Hono();
@@ -8,26 +7,34 @@ const { productController } = createContext();
 
 app.post("/", async (c) => {
   try {
-    const body = await c.req.json();
-
-    const dto = CreateProductSchema.parse(body);
-
-    await productController.create(dto);
-
-    return c.json({
-      message: "Product created successfully",
-    });
+    await productController.create(await c.req.json());
+    return c.json(
+      {
+        message: "Product created successfully",
+      },
+      201,
+    );
   } catch (error) {
     if (error instanceof ZodError) {
-      return c.text(error.message, 400);
+      return c.json(
+        {
+          message: "Validation failed",
+          issues: error.issues,
+        },
+        400,
+      );
     }
-    return c.json({ error }, 400);
+    throw error;
   }
 });
 
 app.get("/", async (c) => {
-  const products = await productController.all();
-  return c.json(products);
+  try {
+    const products = await productController.allProducts();
+    return c.json(products);
+  } catch (error) {
+    throw error;
+  }
 });
 
 app.get("/top", async (c) => {
@@ -36,10 +43,14 @@ app.get("/top", async (c) => {
   const limit = limitParam ? Number(limitParam) : 10;
 
   if (limit !== undefined && (!Number.isInteger(limit) || limit <= 0)) {
-    return c.json({ error: "limit must be a positive integer" }, 400);
+    throw new Error("Limit set is not valid");
   }
-  const topProducts = await productController.top(limit);
-  return c.json(topProducts);
+  try {
+    const topProducts = await productController.topProducts(limit);
+    return c.json(topProducts);
+  } catch (error) {
+    throw error;
+  }
 });
 
 export default app;
