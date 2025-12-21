@@ -3,6 +3,7 @@ import { Product } from "@application/Product.ts";
 
 Deno.test("Product.create() constructs a valid product", () => {
   const product = Product.create({
+    categoryId: 2,
     title: "Laptop",
     description: "High-end laptop",
     price: 1200,
@@ -10,6 +11,7 @@ Deno.test("Product.create() constructs a valid product", () => {
     rating: 5,
   });
 
+  assertEquals(product.categoryId, 2);
   assertEquals(product.title, "Laptop");
   assertEquals(product.description, "High-end laptop");
   assertEquals(product.price, 1200);
@@ -21,6 +23,7 @@ Deno.test("Product.create() throws on invalid title", () => {
   assertThrows(
     () =>
       Product.create({
+        categoryId: 2,
         title: "A",
         description: "Desc",
         price: 100,
@@ -36,6 +39,7 @@ Deno.test("Product.create() throws on invalid description", () => {
   assertThrows(
     () =>
       Product.create({
+        categoryId: 2,
         title: "Valid",
         description: "x",
         price: 100,
@@ -51,6 +55,7 @@ Deno.test("Product.create() throws on invalid price", () => {
   assertThrows(
     () =>
       Product.create({
+        categoryId: 2,
         title: "Valid",
         description: "Valid",
         price: 0,
@@ -66,6 +71,7 @@ Deno.test("Product.create() throws on invalid image", () => {
   assertThrows(
     () =>
       Product.create({
+        categoryId: 2,
         title: "Valid",
         description: "Valid",
         price: 100,
@@ -81,6 +87,7 @@ Deno.test("Product.create() throws on invalid rating", () => {
   assertThrows(
     () =>
       Product.create({
+        categoryId: 2,
         title: "Valid",
         description: "Valid",
         price: 100,
@@ -96,6 +103,7 @@ Deno.test(
   "updateTotalRating updates rating correctly when initial rating > 0",
   () => {
     const product = Product.create({
+      categoryId: 2,
       title: "Laptop",
       description: "High-end laptop",
       price: 1200,
@@ -110,6 +118,7 @@ Deno.test(
 
 Deno.test("updateTotalRating sets rating if initial rating is 0", () => {
   const product = Product.create({
+    categoryId: 2,
     title: "Cheap pen",
     description: "A pen",
     price: 2,
@@ -123,6 +132,7 @@ Deno.test("updateTotalRating sets rating if initial rating is 0", () => {
 
 Deno.test("updateTotalRating throws if newRating <= 0", () => {
   const product = Product.create({
+    categoryId: 2,
     title: "Laptop",
     description: "High-end laptop",
     price: 1200,

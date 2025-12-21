@@ -1,30 +1,31 @@
 import { Hono } from "hono";
-import { ProductsHttpController } from "@adapters/inbound/ProductsHttpController.ts";
 import { createContext } from "../configurator.ts";
+import { CreateProductSchema } from "@adapters/anti-corruption-layer/ProductsMapper.ts";
+import { ZodError } from "zod";
 
 const app = new Hono();
-const { database: postgreSQLRepository } = createContext();
+const { productController } = createContext();
 
-app.post("/", (c) => {
-  const newProduct = {
-    title: "new product",
-    description: "new desc",
-    price: 102,
-    image: "someimage.url",
-    rating: 3,
-    categoryId: 4,
-  };
+app.post("/", async (c) => {
+  try {
+    const body = await c.req.json();
 
-  const productController = new ProductsHttpController(postgreSQLRepository);
-  productController.create(newProduct);
+    const dto = CreateProductSchema.parse(body);
 
-  return c.json({
-    message: "Product created successfully",
-  });
+    await productController.create(dto);
+
+    return c.json({
+      message: "Product created successfully",
+    });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return c.text(error.message, 400);
+    }
+    return c.json({ error }, 400);
+  }
 });
 
 app.get("/", async (c) => {
-  const productController = new ProductsHttpController(postgreSQLRepository);
   const products = await productController.all();
   return c.json(products);
 });
@@ -37,7 +38,6 @@ app.get("/top", async (c) => {
   if (limit !== undefined && (!Number.isInteger(limit) || limit <= 0)) {
     return c.json({ error: "limit must be a positive integer" }, 400);
   }
-  const productController = new ProductsHttpController(postgreSQLRepository);
   const topProducts = await productController.top(limit);
   return c.json(topProducts);
 });

@@ -1,10 +1,8 @@
-import {
-  ProductDTO,
-  ProductRecord,
-} from "@adapters/anti-corruption-layer/ProductsMapper.ts";
+import { ProductRecord } from "../anti-corruption-layer/ProductsMapper.ts";
+import { Product } from "../Product.ts";
 
 export interface ForPersistingProducts {
-  createProduct(product: Omit<ProductDTO, "id">): Promise<void>;
+  createProduct(product: Product): Promise<void>;
   saveProduct(product: ProductRecord): Promise<void>;
   topProducts(limit?: number): Promise<ProductRecord[]>;
   allProducts(): Promise<ProductRecord[]>;

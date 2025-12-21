@@ -12,6 +12,7 @@ Deno.test("Cart creation with empty items", () => {
 Deno.test("Add product to cart", () => {
   const cart = Cart.create({});
   const product = Product.create({
+    categoryId: 2,
     title: "Laptop",
     description: "High-end laptop",
     price: 1000,
@@ -29,6 +30,7 @@ Deno.test("Add product to cart", () => {
 Deno.test("Add same product increments quantity", () => {
   const cart = Cart.create({});
   const product = Product.create({
+    categoryId: 2,
     title: "Laptop",
     description: "High-end laptop",
     price: 1000,
@@ -47,6 +49,7 @@ Deno.test("Add same product increments quantity", () => {
 Deno.test("Remove product partially and fully", () => {
   const cart = Cart.create({});
   const product = Product.create({
+    categoryId: 2,
     title: "Laptop",
     description: "High-end laptop",
     price: 1000,
@@ -71,6 +74,7 @@ Deno.test("Remove product partially and fully", () => {
 Deno.test("Remove non-existing product does nothing", () => {
   const cart = Cart.create({});
   const product = Product.create({
+    categoryId: 2,
     title: "Laptop",
     description: "High-end laptop",
     price: 1000,
@@ -88,6 +92,7 @@ Deno.test("Remove non-existing product does nothing", () => {
 Deno.test("Clear cart empties items", () => {
   const cart = Cart.create({});
   const product1 = Product.create({
+    categoryId: 2,
     title: "Laptop",
     description: "High-end laptop",
     price: 1000,
@@ -96,6 +101,7 @@ Deno.test("Clear cart empties items", () => {
   });
 
   const product2 = Product.create({
+    categoryId: 2,
     title: "Mouse",
     description: "Wireless mouse",
     price: 50,

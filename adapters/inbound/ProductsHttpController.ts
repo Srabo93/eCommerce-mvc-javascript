@@ -1,34 +1,31 @@
-import { ForPersistingProducts } from "@application/outbound/ForPersistingProducts.ts";
 import { ForHandlingProducts } from "@application/inbound/product/ForHandlingProducts.ts";
+import { ProductService } from "@application/service/product.ts";
 import {
-  ProductDTO,
-  ProductsMapper,
-} from "../anti-corruption-layer/ProductsMapper.ts";
+  CreateProductDTO,
+  PublicProductDTO,
+} from "@application/anti-corruption-layer/ProductsMapper.ts";
 
 export class ProductsHttpController implements ForHandlingProducts {
-  constructor(private db: ForPersistingProducts) {}
+  constructor(private readonly productService: ProductService) {}
 
-  save(product: ProductDTO): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
-
-  async all(): Promise<ProductDTO[]> {
-    const allProducts = await this.db.allProducts();
-
-    return allProducts.map((productRecord) => {
-      return ProductsMapper.toDTO(productRecord);
+  async create(dto: CreateProductDTO): Promise<void> {
+    await this.productService.create({
+      categoryId: dto.categoryId,
+      title: dto.title,
+      description: dto.description,
+      price: dto.price,
+      image: dto.image,
+      rating: dto.rating,
     });
   }
 
-  async top(limit?: number): Promise<ProductDTO[]> {
-    const topProductsRecord = await this.db.topProducts(limit);
-
-    return topProductsRecord.map((topProduct) => {
-      return ProductsMapper.toDTO(topProduct);
-    });
+  async all(): Promise<PublicProductDTO[]> {
+    const products = await this.productService.all();
+    return products;
   }
 
-  create(product: Omit<ProductDTO, "id">): void {
-    this.db.createProduct(product);
+  async top(limit?: number): Promise<PublicProductDTO[]> {
+    const products = await this.productService.top(limit);
+    return products;
   }
 }

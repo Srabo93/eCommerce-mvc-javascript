@@ -1,28 +1,28 @@
-import { ForPersistingProducts } from "@application/outbound/ForPersistingProducts.ts";
 import { InMemoryDB } from "./test/interactor/InMemoryDB.ts";
 import { load } from "jsr:@std/dotenv";
 import { PostgreSQLRepository } from "@adapters/outbound/PostgreSQLRepository.ts";
-import { ForPersistingUsers } from "@application/outbound/ForPersistingUser.ts";
-
-export interface AppContext {
-  database: ForPersistingProducts & ForPersistingUsers;
-}
+import { ProductService } from "@application/service/product.ts";
+import { ProductsHttpController } from "@adapters/inbound/ProductsHttpController.ts";
 
 const env = await load({
   envPath: ".env",
   export: true,
 });
 
-export function createContext(): AppContext {
+export function createContext() {
   switch (env.APP_ENV) {
     case "development": {
       const database = new InMemoryDB();
-      return { database };
+      const productService = new ProductService(database);
+      const productController = new ProductsHttpController(productService);
+      return { productController };
     }
 
     case "integration": {
       const database = new PostgreSQLRepository();
-      return { database };
+      const productService = new ProductService(database);
+      const productController = new ProductsHttpController(productService);
+      return { productController };
     }
 
     // case "prod": {

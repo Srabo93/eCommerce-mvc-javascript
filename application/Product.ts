@@ -1,5 +1,6 @@
 export class Product {
   private constructor(
+    private _categoryId: number,
     private _title: string,
     private _description: string,
     private _price: number,
@@ -20,6 +21,7 @@ export class Product {
   }
 
   static create(params: {
+    categoryId: number;
     title: string;
     description: string;
     price: number;
@@ -27,6 +29,7 @@ export class Product {
     rating: number;
   }): Product {
     const product = new Product(
+      params.categoryId,
       params.title,
       params.description,
       params.price,
@@ -39,11 +42,19 @@ export class Product {
   }
 
   private validate(): void {
+    this.setCategoryId(this._categoryId);
     this.setTitle(this._title);
     this.setDescription(this._description);
     this.setPrice(this._price);
     this.setImage(this._image);
     this.setRating(this._rating);
+  }
+
+  setCategoryId(_categoryId: number) {
+    if (typeof _categoryId !== "number") {
+      throw new Error("Method not implemented.");
+    }
+    this._categoryId = _categoryId;
   }
 
   private setTitle(title: string) {
@@ -81,6 +92,9 @@ export class Product {
     this._rating = _rating;
   }
 
+  get categoryId(): number {
+    return this._categoryId;
+  }
   get title(): string {
     return this._title;
   }

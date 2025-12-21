@@ -3,6 +3,7 @@ import { Product } from "@application/Product.ts";
 import { ProductCategory } from "@application/ProductCategory.ts";
 
 const productA = Product.create({
+  categoryId: 2,
   title: "Laptop",
   description: "High-end laptop",
   price: 1200,
@@ -11,6 +12,7 @@ const productA = Product.create({
 });
 
 const productB = Product.create({
+  categoryId: 2,
   title: "Phone",
   description: "Smartphone",
   price: 800,
