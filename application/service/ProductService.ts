@@ -28,8 +28,8 @@ export class ProductService implements ForHandlingProducts {
     throw new Error("Method not implemented.");
   }
 
-  async findAllProducts(): Promise<PublicProductDTO[]> {
-    const products = await this.repository.allProducts();
+  async findAllProducts(limit?: number): Promise<PublicProductDTO[]> {
+    const products = await this.repository.allProducts(limit);
 
     return products.map((record) => ProductsMapper.toPublicDTO(record));
   }

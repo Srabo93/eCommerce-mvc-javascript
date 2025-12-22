@@ -29,8 +29,15 @@ app.post("/", async (c) => {
 });
 
 app.get("/", async (c) => {
+  const limitParam = c.req.query("limit");
+
+  const limit = limitParam ? Number(limitParam) : 10;
+
+  if (limit !== undefined && (!Number.isInteger(limit) || limit <= 0)) {
+    throw new Error("Limit set is not valid");
+  }
   try {
-    const products = await productController.allProducts();
+    const products = await productController.allProducts(limit);
     return c.json(products);
   } catch (error) {
     throw error;

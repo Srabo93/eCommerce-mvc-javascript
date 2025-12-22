@@ -25,8 +25,8 @@ export class ProductHttpAdapter {
     });
   }
 
-  async allProducts(): Promise<PublicProductDTO[]> {
-    const products = await this.productService.findAllProducts();
+  async allProducts(limit?: number): Promise<PublicProductDTO[]> {
+    const products = await this.productService.findAllProducts(limit);
     return products;
   }
 

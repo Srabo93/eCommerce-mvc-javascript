@@ -3,6 +3,6 @@ import { Product } from "../../Product.ts";
 
 export interface ForHandlingProducts {
   createProduct(product: Product): Promise<void>;
-  findAllProducts(): Promise<PublicProductDTO[]>;
+  findAllProducts(limit?: number): Promise<PublicProductDTO[]>;
   findTopProducts(limit?: number): Promise<PublicProductDTO[]>;
 }
