@@ -1,12 +1,7 @@
-import {
-  ProductDTO,
-  ProductRecord,
-  PublicProductDTO,
-  ProductsMapper,
-} from "../anti-corruption-layer/ProductsMapper.ts";
-import { ForHandlingProducts } from "../driving_ports/for_handling_products/ForHandlingProducts.ts";
-import { ForPersistingProducts } from "../driven_ports/for_persisting_products/ForPersistingProducts.ts";
-import { Product } from "../Product.ts";
+import { ForPersistingProducts } from "../../driven_ports/for_persisting_products/ForPersistingProducts.ts";
+import { ForHandlingProducts } from "../../driving_ports/for_handling_products/ForHandlingProducts.ts";
+import { Product } from "../../Product.ts";
+import { ProductDTO, ProductRecord } from "./ProductDTO.ts";
 
 export class ProductService implements ForHandlingProducts {
   constructor(private readonly repository: ForPersistingProducts) {}
@@ -28,15 +23,13 @@ export class ProductService implements ForHandlingProducts {
     throw new Error("Method not implemented.");
   }
 
-  async findAllProducts(limit?: number): Promise<PublicProductDTO[]> {
+  async findAllProducts(limit?: number): Promise<ProductRecord[]> {
     const products = await this.repository.allProducts(limit);
-
-    return products.map((record) => ProductsMapper.toPublicDTO(record));
+    return products;
   }
 
-  async findTopProducts(limit?: number): Promise<PublicProductDTO[]> {
+  async findTopProducts(limit?: number): Promise<ProductRecord[]> {
     const products = await this.repository.topProducts(limit);
-
-    return products.map((record) => ProductsMapper.toPublicDTO(record));
+    return products;
   }
 }

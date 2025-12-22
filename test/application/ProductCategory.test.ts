@@ -56,7 +56,7 @@ Deno.test("ProductCategory: validation throws for empty products", () => {
   assertEquals(category.products.length, 0);
 });
 
-Deno.test("ProductCategory: addProduct adds new for_handling_products", () => {
+Deno.test("ProductCategory: addProduct adds new product_api", () => {
   const category = ProductCategory.create({
     title: "Electronics",
     description: "All electronic devices",
@@ -94,7 +94,7 @@ Deno.test("ProductCategory: removeProduct works", () => {
   assertEquals(category.products[0].title, "Phone");
 });
 
-Deno.test("ProductCategory: removeProduct throws if for_handling_products not found", () => {
+Deno.test("ProductCategory: removeProduct throws if product_api not found", () => {
   const category = ProductCategory.create({
     title: "Electronics",
     description: "All electronic devices",

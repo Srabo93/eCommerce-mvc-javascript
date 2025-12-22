@@ -3,11 +3,11 @@ import { createContext } from "../configurator.ts";
 import { ZodError } from "zod";
 
 const app = new Hono();
-const { productController } = createContext();
+const { productApiAdapter } = createContext();
 
 app.post("/", async (c) => {
   try {
-    await productController.create(await c.req.json());
+    await productApiAdapter.create(await c.req.json());
     return c.json(
       {
         message: "Product created successfully",
@@ -37,7 +37,7 @@ app.get("/", async (c) => {
     throw new Error("Limit set is not valid");
   }
   try {
-    const products = await productController.allProducts(limit);
+    const products = await productApiAdapter.allProducts(limit);
     return c.json(products);
   } catch (error) {
     throw error;
@@ -53,7 +53,7 @@ app.get("/top", async (c) => {
     throw new Error("Limit set is not valid");
   }
   try {
-    const topProducts = await productController.topProducts(limit);
+    const topProducts = await productApiAdapter.topProducts(limit);
     return c.json(topProducts);
   } catch (error) {
     throw error;

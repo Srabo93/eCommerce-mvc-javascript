@@ -10,7 +10,7 @@ export class Product {
 
   public updateTotalRating(newRating: number) {
     if (newRating <= 0) {
-      throw new Error("New for_handling_products rating cant be smaller or equal 0");
+      throw new Error("New product_api rating cant be smaller or equal 0");
     }
 
     if (this._rating === 0) {

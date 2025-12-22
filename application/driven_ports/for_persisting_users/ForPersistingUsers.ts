@@ -1,4 +1,7 @@
-import { UserDTO, UserRecord } from "../../anti-corruption-layer/UsersMapper.ts";
+import {
+  UserDTO,
+  UserRecord,
+} from "@driving_adapters/user_api/UserHttpMapper.ts";
 
 export interface ForPersistingUsers {
   registerUser(newUser: Omit<UserDTO, "id">): void;

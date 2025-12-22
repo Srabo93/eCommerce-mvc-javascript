@@ -1,7 +1,7 @@
 import { assertEquals, assertThrows } from "@std/assert";
 import { User, UserRole } from "@application/User.ts";
 
-Deno.test("User.create() constructs a valid for_handling_users with default role", () => {
+Deno.test("User.create() constructs a valid user_api with default role", () => {
   const user = User.create({
     email: "john@example.com",
     firstName: "John",
@@ -14,7 +14,7 @@ Deno.test("User.create() constructs a valid for_handling_users with default role
   assertEquals(user.role, "user");
 });
 
-Deno.test("User.create() constructs a for_handling_users with custom role", () => {
+Deno.test("User.create() constructs a user_api with custom role", () => {
   const user = User.create({
     email: "admin@example.com",
     firstName: "Alice",

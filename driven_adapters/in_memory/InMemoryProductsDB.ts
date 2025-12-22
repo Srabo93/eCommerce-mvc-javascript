@@ -1,17 +1,9 @@
-import { ProductRecord } from "@application/anti-corruption-layer/ProductsMapper.ts";
-import {
-  UserRecord,
-  UsersMapper,
-} from "@application/anti-corruption-layer/UsersMapper.ts";
 import { ForPersistingProducts } from "@application/driven_ports/for_persisting_products/ForPersistingProducts.ts";
-import { ForPersistingUsers } from "@application/driven_ports/for_persisting_users/ForPersistingUser.ts";
 import { Product } from "@application/Product.ts";
+import { ProductRecord } from "@application/service/product/ProductDTO.ts";
 
-export class InMemoryDB implements ForPersistingProducts, ForPersistingUsers {
-  constructor(
-    private _products: ProductRecord[] = [],
-    private _users: any[] = [],
-  ) {
+export class InMemoryProductsDB implements ForPersistingProducts {
+  constructor(private _products: ProductRecord[] = []) {
     for (let i = 0; i <= 10; i++) {
       const product = {
         productId: i + 12,
@@ -42,12 +34,14 @@ export class InMemoryDB implements ForPersistingProducts, ForPersistingUsers {
       resolve();
     });
   }
+
   saveProduct(product: ProductRecord): Promise<void> {
     return new Promise((resolve, _reject) => {
       this._products.push(product);
       resolve();
     });
   }
+
   topProducts(limit?: number): Promise<ProductRecord[]> {
     return new Promise((resolve, _reject) => {
       const result = this._products
@@ -57,23 +51,11 @@ export class InMemoryDB implements ForPersistingProducts, ForPersistingUsers {
       resolve(result);
     });
   }
-  allProducts(): Promise<ProductRecord[]> {
+
+  allProducts(limit?: number): Promise<ProductRecord[]> {
     return new Promise((resolve, _reject) => {
-      const result = this._products.map((product) => product);
+      const result = this._products.map((product) => product).slice(0, limit);
       resolve(result);
     });
-  }
-
-  findUserByEmail(email: string): Promise<UserRecord | undefined> {
-    const userFound = this._users.find(
-      (userRecord) => userRecord.email === email,
-    );
-    return new Promise((resolve, _reject) => {
-      resolve(userFound);
-    });
-  }
-
-  registerUser(newUser: Omit<UserDTO, "id">): void {
-    this._users.push(UsersMapper.toPersistence({ id: 303, ...newUser }));
   }
 }

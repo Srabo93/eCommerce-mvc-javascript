@@ -1,7 +1,7 @@
 import { assertEquals, assertThrows } from "@std/assert";
 import { Product } from "@application/Product.ts";
 
-Deno.test("Product.create() constructs a valid for_handling_products", () => {
+Deno.test("Product.create() constructs a valid product_api", () => {
   const product = Product.create({
     categoryId: 2,
     title: "Laptop",
@@ -143,6 +143,6 @@ Deno.test("updateTotalRating throws if newRating <= 0", () => {
   assertThrows(
     () => product.updateTotalRating(0),
     Error,
-    "New for_handling_products rating cant be smaller or equal 0",
+    "New product_api rating cant be smaller or equal 0",
   );
 });

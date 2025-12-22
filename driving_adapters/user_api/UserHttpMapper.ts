@@ -1,14 +1,14 @@
 import * as z from "zod";
-import { User } from "../User.ts";
+import { User } from "@application/User.ts";
 
-export const CreateUserSchema = z.object({
+export const UserSchema = z.object({
   email: z.email(),
   firstName: z.string().min(2),
   lastName: z.string().min(2),
   role: z.enum(["user", "admin"]),
 });
 
-export type CreateUserDTO = z.infer<typeof CreateUserSchema>;
+export type UserDTO = z.infer<typeof UserSchema>;
 
 export const UserRecordSchema = z.object({
   id: z.number().int().positive(),

@@ -1,10 +1,9 @@
-import {
-  ProductSchema,
-  PublicProductDTO,
-} from "@application/anti-corruption-layer/ProductsMapper.ts";
-import { ProductService } from "@application/service/ProductService.ts";
+import { PublicProductDTO } from "@application/service/product/ProductDTO.ts";
+import { ProductService } from "@application/service/product/ProductService.ts";
+import { ProductMapper } from "./ProductMapper.ts";
+import { ProductSchema } from "./ProductSchema.ts";
 
-export class ProductHttpAdapter {
+export class ProductApiAdapter {
   constructor(private readonly productService: ProductService) {}
 
   async create(request: unknown): Promise<void> {
@@ -27,11 +26,13 @@ export class ProductHttpAdapter {
 
   async allProducts(limit?: number): Promise<PublicProductDTO[]> {
     const products = await this.productService.findAllProducts(limit);
-    return products;
+
+    return products.map((record) => ProductMapper.toPublicDTO(record));
   }
 
   async topProducts(limit?: number): Promise<PublicProductDTO[]> {
     const products = await this.productService.findTopProducts(limit);
-    return products;
+
+    return products.map((record) => ProductMapper.toPublicDTO(record));
   }
 }

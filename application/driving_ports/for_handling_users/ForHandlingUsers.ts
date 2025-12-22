@@ -1,4 +1,4 @@
-import { UserRecord } from "../../anti-corruption-layer/UsersMapper.ts";
+import { UserRecord } from "@driving_adapters/user_api/UserHttpMapper.ts";
 import { User } from "../../User.ts";
 
 export interface ForHandlingUsers {

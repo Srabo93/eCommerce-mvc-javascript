@@ -1,5 +1,5 @@
-import { ProductRecord } from "../../anti-corruption-layer/ProductsMapper.ts";
 import { Product } from "../../Product.ts";
+import { ProductRecord } from "../../service/product/ProductDTO.ts";
 
 export interface ForPersistingProducts {
   createProduct(product: Product): Promise<void>;

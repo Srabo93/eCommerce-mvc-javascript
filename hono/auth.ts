@@ -2,8 +2,7 @@ import { Hono } from "hono";
 import * as z from "zod";
 import { createContext } from "../configurator.ts";
 import { hash, verify } from "@felix/bcrypt";
-import { UserHttpAdapter } from "../driving_adapters/rest/UserHttpAdapter.ts";
-import { UsersMapper } from "@application/anti-corruption-layer/UsersMapper.ts";
+import { UserApiAdapter } from "@driving_adapters/user_api/UserApiAdapter.ts";
 
 const app = new Hono();
 const { usersController } = createContext();
@@ -29,10 +28,10 @@ app.post("/register", async (c) => {
     role: "user" as const,
   };
 
-  const controller = new UserHttpAdapter(database);
-  controller.register(newUser);
+  // const controller = new UserApiAdapter(database);
+  // controller.register(newUser);
 
-  return c.text("for_handling_users registered successfull", 201);
+  return c.text("user_api registered successfull", 201);
 });
 
 const loginSchema = z.object({
@@ -47,20 +46,20 @@ app.post("/login", async (c) => {
     return c.text("bad request", 400);
   }
 
-  const controller = new UserHttpAdapter(database);
-  const registeredUser = await controller.findUserByEmail(parsed.data.email);
+  // const controller = new UserApiAdapter(database);
+  // const registeredUser = await controller.findUserByEmail(parsed.data.email);
+  //
+  // if (registeredUser === undefined) {
+  //   return c.text("no user_api found", 404);
+  // }
+  //
+  // if (!(await verify(parsed.data.password, registeredUser.password))) {
+  //   return c.text("no matching passwords", 400);
+  // }
+  //
+  // const user = UsersMapper.toPublicDTO(registeredUser);
 
-  if (registeredUser === undefined) {
-    return c.text("no for_handling_users found", 404);
-  }
-
-  if (!(await verify(parsed.data.password, registeredUser.password))) {
-    return c.text("no matching passwords", 400);
-  }
-
-  const user = UsersMapper.toPublicDTO(registeredUser);
-
-  return c.json({ token, ...user });
+  // return c.json({ token, ...user });
 });
 
 export default app;

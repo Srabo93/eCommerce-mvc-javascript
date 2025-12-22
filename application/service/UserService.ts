@@ -1,5 +1,9 @@
+import {
+  UserDTO,
+  UserRecord,
+} from "@driving_adapters/user_api/UserHttpMapper.ts";
+import { ForPersistingUsers } from "../driven_ports/for_persisting_users/ForPersistingUsers.ts";
 import { ForHandlingUsers } from "../driving_ports/for_handling_users/ForHandlingUsers.ts";
-import { ForPersistingUsers } from "../driven_ports/for_persisting_users/ForPersistingUser.ts";
 
 export class UserService implements ForHandlingUsers {
   constructor(private readonly repository: ForPersistingUsers) {}
