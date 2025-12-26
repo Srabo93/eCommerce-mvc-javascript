@@ -1,9 +1,7 @@
-import {
-  UserDTO,
-  UserRecord,
-} from "@driving_adapters/user_api/UserHttpMapper.ts";
+import { RegisterNewUser } from "../../driving_ports/for_handling_users/dto.ts";
+import { UserRecord } from "./dto.ts";
 
 export interface ForPersistingUsers {
-  registerUser(newUser: Omit<UserDTO, "id">): void;
-  findUserByEmail(email: string): Promise<UserRecord | undefined>;
+  registerUser(newUser: RegisterNewUser): Promise<void>;
+  findUserByEmail(email: string): Promise<UserRecord>;
 }

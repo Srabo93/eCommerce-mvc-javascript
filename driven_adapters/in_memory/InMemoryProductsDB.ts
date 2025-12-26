@@ -1,6 +1,6 @@
 import { ForPersistingProducts } from "@application/driven_ports/for_persisting_products/ForPersistingProducts.ts";
 import { Product } from "@application/Product.ts";
-import { ProductRecord } from "@application/service/product/ProductDTO.ts";
+import { ProductRecord } from "@application/driven_ports/for_persisting_products/dto.ts";
 
 export class InMemoryProductsDB implements ForPersistingProducts {
   constructor(private _products: ProductRecord[] = []) {

@@ -2,10 +2,9 @@ import { Hono } from "hono";
 import * as z from "zod";
 import { createContext } from "../configurator.ts";
 import { hash, verify } from "@felix/bcrypt";
-import { UserApiAdapter } from "@driving_adapters/user_api/UserApiAdapter.ts";
 
 const app = new Hono();
-const { usersController } = createContext();
+const { userApiAdapter } = createContext();
 const token = "read+write";
 
 const registerSchema = z.object({
@@ -23,13 +22,11 @@ app.post("/register", async (c) => {
   }
 
   const newUser = {
-    ...parsed.data,
+    ...parsed,
     password: await hash(parsed.data.password),
-    role: "user" as const,
   };
 
-  // const controller = new UserApiAdapter(database);
-  // controller.register(newUser);
+  await userApiAdapter.registerUser(newUser);
 
   return c.text("user_api registered successfull", 201);
 });

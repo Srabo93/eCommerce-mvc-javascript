@@ -1,7 +1,6 @@
-import { UserRecord } from "@driving_adapters/user_api/UserHttpMapper.ts";
-import { User } from "../../User.ts";
+import { UserRecord } from "../../driven_ports/for_persisting_users/dto.ts";
 
 export interface ForHandlingUsers {
-  registerUser(newUser: User): void;
-  findUserByEmail(email: string): Promise<UserRecord | undefined>;
+  registerUser(newUser: unknown): void;
+  findUserByEmail(email: string): Promise<UserRecord>;
 }

@@ -1,6 +1,5 @@
 import { assert, assertEquals, assertRejects } from "@std/assert";
 import { ZodError } from "zod";
-import { ProductService } from "@application/service/product/ProductService.ts";
 import { InMemoryProductsDB } from "@driven_adapters/in_memory/InMemoryProductsDB.ts";
 import { ProductApiAdapter } from "@driving_adapters/product_api/ProductApiAdapter.ts";
 
@@ -8,12 +7,11 @@ Deno.test(
   "ProductAdapter.create throws ZodError for invalid rating",
   async () => {
     const inMemoryDB = new InMemoryProductsDB();
-    const productService = new ProductService(inMemoryDB);
-    const controller = new ProductApiAdapter(productService);
+    const controller = new ProductApiAdapter(inMemoryDB);
 
     const error = await assertRejects(
       async () =>
-        await controller.create({
+        await controller.createProduct({
           categoryId: 1,
           title: "foo",
           description: "bar",
@@ -38,10 +36,9 @@ Deno.test(
   "ProductAdapter.topProducts returns products from repository",
   async () => {
     const inMemoryDB = new InMemoryProductsDB();
-    const productService = new ProductService(inMemoryDB);
-    const controller = new ProductApiAdapter(productService);
+    const controller = new ProductApiAdapter(inMemoryDB);
 
-    const result = await controller.topProducts();
+    const result = await controller.findTopProducts();
     assert(Array.isArray(result));
 
     for (const product of result) {
@@ -62,10 +59,9 @@ Deno.test(
 
 Deno.test("ProductAdapter.topProducts respects limit", async () => {
   const inMemoryDB = new InMemoryProductsDB();
-  const productService = new ProductService(inMemoryDB);
-  const controller = new ProductApiAdapter(productService);
+  const controller = new ProductApiAdapter(inMemoryDB);
 
-  const result = await controller.topProducts(1);
+  const result = await controller.findTopProducts(1);
 
   assertEquals(result.length, 1);
 });
@@ -74,10 +70,9 @@ Deno.test(
   "ProductAdapter.allProducts returns products from repository",
   async () => {
     const inMemoryDB = new InMemoryProductsDB();
-    const productService = new ProductService(inMemoryDB);
-    const controller = new ProductApiAdapter(productService);
+    const controller = new ProductApiAdapter(inMemoryDB);
 
-    const result = await controller.allProducts();
+    const result = await controller.findAllProducts();
     assert(Array.isArray(result));
 
     for (const product of result) {
@@ -100,10 +95,9 @@ Deno.test(
   "ProductAdapter.allProducts returns products from repository respecting limit",
   async () => {
     const inMemoryDB = new InMemoryProductsDB();
-    const productService = new ProductService(inMemoryDB);
-    const controller = new ProductApiAdapter(productService);
+    const controller = new ProductApiAdapter(inMemoryDB);
 
-    const result = await controller.allProducts(5);
+    const result = await controller.findAllProducts(5);
     assert(Array.isArray(result));
 
     assertEquals(result.length, 5);

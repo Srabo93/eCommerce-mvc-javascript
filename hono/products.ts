@@ -7,7 +7,7 @@ const { productApiAdapter } = createContext();
 
 app.post("/", async (c) => {
   try {
-    await productApiAdapter.create(await c.req.json());
+    await productApiAdapter.createProduct(await c.req.json());
     return c.json(
       {
         message: "Product created successfully",
@@ -36,8 +36,9 @@ app.get("/", async (c) => {
   if (limit !== undefined && (!Number.isInteger(limit) || limit <= 0)) {
     throw new Error("Limit set is not valid");
   }
+
   try {
-    const products = await productApiAdapter.allProducts(limit);
+    const products = await productApiAdapter.findAllProducts(limit);
     return c.json(products);
   } catch (error) {
     throw error;
@@ -53,7 +54,7 @@ app.get("/top", async (c) => {
     throw new Error("Limit set is not valid");
   }
   try {
-    const topProducts = await productApiAdapter.topProducts(limit);
+    const topProducts = await productApiAdapter.findTopProducts(limit);
     return c.json(topProducts);
   } catch (error) {
     throw error;
