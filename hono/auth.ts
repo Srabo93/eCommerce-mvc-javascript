@@ -11,22 +11,33 @@ const registerSchema = z.object({
   email: z.email(),
   firstName: z.string().min(2),
   lastName: z.string().min(2),
-  password: z.string().min(2).max(30),
+  password: z.string().min(2),
 });
 
 app.post("/register", async (c) => {
-  const parsed = registerSchema.safeParse(await c.req.parseBody());
+  const requestBody = await c.req.json();
+
+  const parsed = registerSchema.safeParse({
+    email: requestBody.email,
+    firstName: requestBody.firstName,
+    lastName: requestBody.lastName,
+    password: requestBody.password,
+  });
 
   if (!parsed.success) {
     return c.text("invalid form inputs", 400);
   }
 
   const newUser = {
-    ...parsed,
+    ...parsed.data,
     password: await hash(parsed.data.password),
   };
 
-  await userApiAdapter.registerUser(newUser);
+  try {
+    await userApiAdapter.registerUser(newUser);
+  } catch (error) {
+    return c.text("user_api failed" + error, 400);
+  }
 
   return c.text("user_api registered successfull", 201);
 });

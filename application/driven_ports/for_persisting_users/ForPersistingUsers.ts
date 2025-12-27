@@ -3,5 +3,5 @@ import { UserRecord } from "./dto.ts";
 
 export interface ForPersistingUsers {
   registerUser(newUser: RegisterNewUser): Promise<void>;
-  findUserByEmail(email: string): Promise<UserRecord>;
+  findUserByEmail(email: string): Promise<UserRecord | null>;
 }

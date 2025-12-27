@@ -6,6 +6,7 @@ import { RegisterNewUser } from "@application/driving_ports/for_handling_users/d
 
 export class UserApiAdapter implements ForHandlingUsers {
   constructor(private readonly repository: ForPersistingUsers) {}
+
   async registerUser(request: unknown): Promise<void> {
     const parsed = RegisterUserSchema.safeParse(request);
 

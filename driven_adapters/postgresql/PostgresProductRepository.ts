@@ -1,12 +1,10 @@
 import { Client } from "pg";
+import { ProductRecord } from "@application/driven_ports/for_persisting_products/dto.ts";
 import { ForPersistingProducts } from "@application/driven_ports/for_persisting_products/ForPersistingProducts.ts";
-import {
-  ProductDTO,
-  ProductRecord,
-} from "@application/service/product/ProductDTO.ts";
+import { Product } from "@application/Product.ts";
 
 export class PostgresProductRespository implements ForPersistingProducts {
-  async createProduct(product: Omit<ProductDTO, "id">): Promise<void> {
+  async createProduct(product: Product): Promise<void> {
     const client = new Client({
       hostname: "localhost",
       port: 5432,
