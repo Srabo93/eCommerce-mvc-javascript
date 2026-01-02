@@ -12,7 +12,7 @@ export class InMemoryUsersDB implements ForPersistingUsers {
     });
   }
 
-  findUserByEmail(email: string): Promise<UserRecord | null> {
+  loginUser(email: string): Promise<UserRecord | null> {
     const userFound = this._users.find(
       (userRecord) => userRecord.email === email,
     );

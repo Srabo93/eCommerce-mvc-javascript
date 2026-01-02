@@ -7,3 +7,11 @@ export type RegisterNewUser = {
   lastName: string;
   role: UserRole;
 };
+
+export type UserDTO = {
+  userId: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: UserRole;
+};

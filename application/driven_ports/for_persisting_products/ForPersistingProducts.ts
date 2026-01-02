@@ -6,4 +6,5 @@ export interface ForPersistingProducts {
   saveProduct(product: ProductRecord): Promise<void>;
   topProducts(limit?: number): Promise<ProductRecord[]>;
   allProducts(limit?: number): Promise<ProductRecord[]>;
+  findProduct(productId: number): Promise<ProductRecord | null>;
 }

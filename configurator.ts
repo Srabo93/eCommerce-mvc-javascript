@@ -3,6 +3,8 @@ import { InMemoryProductsDB } from "@driven_adapters/in_memory/InMemoryProductsD
 import { ProductApiAdapter } from "@driving_adapters/product_api/ProductApiAdapter.ts";
 import { UserApiAdapter } from "@driving_adapters/user_api/UserApiAdapter.ts";
 import { InMemoryUsersDB } from "@driven_adapters/in_memory/InMemoryUsersDB.ts";
+import { PostgresProductRespository } from "@driven_adapters/postgresql/PostgresProductRepository.ts";
+import { PostgresUserRepository } from "@driven_adapters/postgresql/PostgresUserRepository.ts";
 
 const env = await load({
   envPath: ".env",
@@ -19,12 +21,13 @@ export function createContext() {
       return { productApiAdapter, userApiAdapter };
     }
 
-    // case "integration": {
-    //   const database = new PostgresProductRespository();
-    //   const productService = new ProductService(database);
-    //   const productApiAdapter = new ProductApiAdapter(productService);
-    //   return { productApiAdapter };
-    // }
+    case "integration": {
+      const productRepo = new PostgresProductRespository();
+      const userRepo = new PostgresUserRepository();
+      const productApiAdapter = new ProductApiAdapter(productRepo);
+      const userApiAdapter = new UserApiAdapter(userRepo);
+      return { productApiAdapter, userApiAdapter };
+    }
 
     // case "prod": {
     //   const database = getDatabase("prod");

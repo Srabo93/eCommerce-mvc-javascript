@@ -24,7 +24,7 @@ app.post("/", async (c) => {
         400,
       );
     }
-    throw error;
+    return c.json(error, 500);
   }
 });
 
@@ -41,7 +41,22 @@ app.get("/", async (c) => {
     const products = await productApiAdapter.findAllProducts(limit);
     return c.json(products);
   } catch (error) {
-    throw error;
+    return c.json(error, 500);
+  }
+});
+
+app.get("/:productId", async (c) => {
+  const productId = c.req.param("productId");
+
+  if (!productId) {
+    return c.text("no product id sent", 400);
+  }
+
+  try {
+    const product = await productApiAdapter.findProductById(Number(productId));
+    return c.json(product);
+  } catch (error) {
+    return c.json(error, 500);
   }
 });
 
@@ -53,11 +68,12 @@ app.get("/top", async (c) => {
   if (limit !== undefined && (!Number.isInteger(limit) || limit <= 0)) {
     throw new Error("Limit set is not valid");
   }
+
   try {
     const topProducts = await productApiAdapter.findTopProducts(limit);
     return c.json(topProducts);
   } catch (error) {
-    throw error;
+    return c.json(error, 500);
   }
 });
 

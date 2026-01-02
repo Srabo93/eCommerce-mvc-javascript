@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import * as z from "zod";
 import { createContext } from "../configurator.ts";
 import { hash, verify } from "@felix/bcrypt";
+import { UserDTO } from "@application/driving_ports/for_handling_users/dto.ts";
 
 const app = new Hono();
 const { userApiAdapter } = createContext();
@@ -44,30 +45,35 @@ app.post("/register", async (c) => {
 
 const loginSchema = z.object({
   email: z.email(),
-  password: z.string().min(2).max(30),
+  password: z.string().min(2),
 });
 
 app.post("/login", async (c) => {
-  const parsed = loginSchema.safeParse(await c.req.parseBody());
+  const parsed = loginSchema.safeParse(await c.req.json());
 
   if (!parsed.success) {
     return c.text("bad request", 400);
   }
 
-  // const controller = new UserApiAdapter(database);
-  // const registeredUser = await controller.findUserByEmail(parsed.data.email);
-  //
-  // if (registeredUser === undefined) {
-  //   return c.text("no user_api found", 404);
-  // }
-  //
-  // if (!(await verify(parsed.data.password, registeredUser.password))) {
-  //   return c.text("no matching passwords", 400);
-  // }
-  //
-  // const user = UsersMapper.toPublicDTO(registeredUser);
+  const retrievedUser = await userApiAdapter.findUserByEmail(parsed.data.email);
 
-  // return c.json({ token, ...user });
+  if (retrievedUser === null) {
+    return c.text("no user_api found", 404);
+  }
+
+  if (!(await verify(parsed.data.password, retrievedUser.password))) {
+    return c.text("no matching passwords", 400);
+  }
+
+  const user = {
+    userId: retrievedUser.userId,
+    email: retrievedUser.email,
+    firstName: retrievedUser.firstName,
+    lastName: retrievedUser.lastName,
+    role: retrievedUser.role,
+  } satisfies UserDTO;
+
+  return c.json({ token, ...user });
 });
 
 export default app;

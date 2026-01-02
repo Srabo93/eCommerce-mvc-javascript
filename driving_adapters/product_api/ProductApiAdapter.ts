@@ -1,11 +1,28 @@
 import { ForPersistingProducts } from "@application/driven_ports/for_persisting_products/ForPersistingProducts.ts";
+import { ProductDTO } from "@application/driving_ports/for_handling_products/dto.ts";
 import { ForHandlingProducts } from "@application/driving_ports/for_handling_products/ForHandlingProducts.ts";
 import { Product } from "@application/Product.ts";
 import { NewProductSchema } from "./ProductSchema.ts";
-import { ProductDTO } from "@application/driving_ports/for_handling_products/dto.ts";
 
 export class ProductApiAdapter implements ForHandlingProducts {
   constructor(private readonly repository: ForPersistingProducts) {}
+
+  async findProductById(productId: number): Promise<ProductDTO | null> {
+    const foundProduct = await this.repository.findProduct(productId);
+
+    if (foundProduct === null) {
+      return null;
+    }
+    return {
+      productId: foundProduct.productId,
+      categoryId: foundProduct.categoryId,
+      title: foundProduct.title,
+      description: foundProduct.description,
+      price: foundProduct.price,
+      image: foundProduct.image,
+      rating: foundProduct.rating,
+    } satisfies ProductDTO;
+  }
 
   async createProduct(request: unknown): Promise<void> {
     const parsed = NewProductSchema.safeParse(request);

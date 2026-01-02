@@ -4,6 +4,43 @@ import { ForPersistingProducts } from "@application/driven_ports/for_persisting_
 import { Product } from "@application/Product.ts";
 
 export class PostgresProductRespository implements ForPersistingProducts {
+  async findProduct(productId: number): Promise<ProductRecord | null> {
+    const client = new Client({
+      hostname: "localhost",
+      port: 5432,
+      user: "myuser",
+      password: "mypassword",
+      database: "honodb",
+    });
+
+    const query = `
+    SELECT * FROM products WHERE id = $1;
+    `;
+
+    try {
+      await client.connect();
+      const record = await client.query(query, [productId]);
+
+      if (record.rows.length === 0) {
+        return null;
+      }
+
+      return {
+        productId: record.rows[0].id,
+        categoryId: record.rows[0].category_id,
+        title: record.rows[0].title,
+        description: record.rows[0].description,
+        price: record.rows[0].price,
+        image: record.rows[0].image,
+        rating: record.rows[0].rating,
+      } satisfies ProductRecord;
+    } catch (error) {
+      throw error;
+    } finally {
+      await client.end();
+    }
+  }
+
   async createProduct(product: Product): Promise<void> {
     const client = new Client({
       hostname: "localhost",
@@ -31,6 +68,7 @@ export class PostgresProductRespository implements ForPersistingProducts {
       ]);
     } catch (error) {
       console.log(error);
+      throw error;
     } finally {
       await client.end();
     }
@@ -63,6 +101,7 @@ export class PostgresProductRespository implements ForPersistingProducts {
       ]);
     } catch (error) {
       console.log(error);
+      throw error;
     } finally {
       await client.end();
     }
@@ -91,19 +130,26 @@ export class PostgresProductRespository implements ForPersistingProducts {
     LIMIT $1;
   `;
 
-    let topProducts: ProductRecord[] = [];
-
     try {
       await client.connect();
       const records = await client.query(query, [limit]);
-      topProducts = records.rows;
+      return records.rows.map((record: any) => {
+        return {
+          productId: record.id,
+          categoryId: record.category_id,
+          title: record.title,
+          description: record.description,
+          price: record.price,
+          image: record.image,
+          rating: record.rating,
+        } satisfies ProductRecord;
+      });
     } catch (error) {
       console.log(error);
+      throw error;
     } finally {
       await client.end();
     }
-
-    return topProducts;
   }
 
   async allProducts(): Promise<ProductRecord[]> {
@@ -118,18 +164,27 @@ export class PostgresProductRespository implements ForPersistingProducts {
     const query = `
     SELECT * FROM products;
     `;
-    let allRecords: ProductRecord[] = [];
 
     try {
       await client.connect();
       const records = await client.query(query);
-      allRecords = records.rows;
+
+      return records.rows.map((record: any) => {
+        return {
+          productId: record.id,
+          categoryId: record.category_id,
+          title: record.title,
+          description: record.description,
+          price: record.price,
+          image: record.image,
+          rating: record.rating,
+        } satisfies ProductRecord;
+      });
     } catch (error) {
       console.log(error);
+      throw error;
     } finally {
       await client.end();
     }
-
-    return allRecords;
   }
 }
