@@ -1,6 +1,7 @@
 import { ForPersistingProducts } from "@application/driven_ports/for_persisting_products/ForPersistingProducts.ts";
 import { Product } from "@application/Product.ts";
 import { ProductRecord } from "@application/driven_ports/for_persisting_products/dto.ts";
+import { resolve } from "node:dns";
 
 export class InMemoryProductsDB implements ForPersistingProducts {
   constructor(private _products: ProductRecord[] = []) {
@@ -17,6 +18,18 @@ export class InMemoryProductsDB implements ForPersistingProducts {
 
       this._products.push(product);
     }
+  }
+
+  findProduct(productId: number): Promise<ProductRecord | null> {
+    return new Promise((resolve, _reject) => {
+      const product = this._products.find(
+        (product) => product.productId === productId,
+      );
+      if (product !== undefined) {
+        resolve(product);
+      }
+      _reject();
+    });
   }
 
   createProduct(product: Product): Promise<void> {
